@@ -1,0 +1,8 @@
+/Inputs
+/Calificación
+/**/.antlr
+/**/*.interp
+/**/*.tokens
+/**/codemirror
+.vscode
+/**/Images
