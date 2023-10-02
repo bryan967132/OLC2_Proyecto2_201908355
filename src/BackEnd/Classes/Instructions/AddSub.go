@@ -30,6 +30,6 @@ func (a *AddSub) ColumnN() int {
 	return a.Column
 }
 
-func (a *AddSub) Exec(env *env.Env) *utils.ReturnType {
+func (a *AddSub) Exec(env *env.Env) *utils.ReturnValue {
 	return nil
 }

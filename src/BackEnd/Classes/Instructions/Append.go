@@ -26,6 +26,6 @@ func (a *Append) ColumnN() int {
 	return a.Column
 }
 
-func (a *Append) Exec(env *env.Env) *utils.ReturnType {
+func (a *Append) Exec(env *env.Env) *utils.ReturnValue {
 	return nil
 }

@@ -26,6 +26,6 @@ func (w *While) ColumnN() int {
 	return w.Column
 }
 
-func (w *While) Exec(Env *env.Env) *utils.ReturnType {
+func (w *While) Exec(Env *env.Env) *utils.ReturnValue {
 	return nil
 }

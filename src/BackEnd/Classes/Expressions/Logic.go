@@ -27,6 +27,6 @@ func (lg *Logic) ColumnN() int {
 	return lg.Column
 }
 
-func (lg *Logic) Exec(env *env.Env) *utils.ReturnType {
-	return &utils.ReturnType{Value: "nil", Type: utils.NIL}
+func (lg *Logic) Exec(env *env.Env) *utils.ReturnValue {
+	return nil
 }

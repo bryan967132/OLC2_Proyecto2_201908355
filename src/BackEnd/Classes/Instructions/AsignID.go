@@ -26,6 +26,6 @@ func (as *AsignID) ColumnN() int {
 	return as.Column
 }
 
-func (as *AsignID) Exec(env *env.Env) *utils.ReturnType {
+func (as *AsignID) Exec(env *env.Env) *utils.ReturnValue {
 	return nil
 }

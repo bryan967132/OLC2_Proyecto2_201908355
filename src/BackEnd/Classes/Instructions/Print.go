@@ -25,6 +25,6 @@ func (prt *Print) ColumnN() int {
 	return prt.Column
 }
 
-func (prt *Print) Exec(env *env.Env) *utils.ReturnType {
+func (prt *Print) Exec(env *env.Env) *utils.ReturnValue {
 	return nil
 }

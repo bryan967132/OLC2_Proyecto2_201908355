@@ -28,7 +28,7 @@ func (in *InitMatrix) ColumnN() int {
 	return in.Column
 }
 
-func (in *InitMatrix) Exec(env *env.Env) *utils.ReturnType {
+func (in *InitMatrix) Exec(env *env.Env) *utils.ReturnValue {
 	return nil
 }
 

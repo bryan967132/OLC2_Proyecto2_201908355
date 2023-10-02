@@ -26,6 +26,6 @@ func (ac *AccessArray) ColumnN() int {
 	return ac.Column
 }
 
-func (ac *AccessArray) Exec(env *env.Env) *utils.ReturnType {
-	return &utils.ReturnType{Value: "nil", Type: utils.NIL}
+func (ac *AccessArray) Exec(env *env.Env) *utils.ReturnValue {
+	return nil
 }

@@ -23,6 +23,6 @@ func (c *Continue) ColumnN() int {
 	return c.Column
 }
 
-func (c *Continue) Exec(env *env.Env) *utils.ReturnType {
-	return &utils.ReturnType{Value: c.TypeInst, Type: utils.NIL}
+func (c *Continue) Exec(env *env.Env) *utils.ReturnValue {
+	return nil
 }

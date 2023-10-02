@@ -26,6 +26,6 @@ func (r *Remove) ColumnN() int {
 	return r.Column
 }
 
-func (r *Remove) Exec(env *env.Env) *utils.ReturnType {
+func (r *Remove) Exec(env *env.Env) *utils.ReturnValue {
 	return nil
 }

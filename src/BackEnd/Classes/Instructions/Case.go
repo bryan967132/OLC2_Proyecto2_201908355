@@ -12,7 +12,7 @@ type Case struct {
 	TypeInst     utils.TypeInst
 	Case         interfaces.Expression
 	Block        interfaces.Instruction
-	CaseEvaluate *utils.ReturnType
+	CaseEvaluate *utils.ReturnValue
 	Flag         bool
 }
 
@@ -28,10 +28,10 @@ func (c *Case) ColumnN() int {
 	return c.Column
 }
 
-func (c *Case) SetCase(caseEvaluate *utils.ReturnType) {
+func (c *Case) SetCase(caseEvaluate *utils.ReturnValue) {
 	c.CaseEvaluate = caseEvaluate
 }
 
-func (c *Case) Exec(Env *env.Env) *utils.ReturnType {
+func (c *Case) Exec(Env *env.Env) *utils.ReturnValue {
 	return nil
 }

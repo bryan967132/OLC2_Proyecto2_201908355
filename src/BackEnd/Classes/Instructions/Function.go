@@ -36,6 +36,6 @@ func (f *Function) GetBlock() interfaces.Instruction {
 	return f.Block
 }
 
-func (f *Function) Exec(Env *env.Env) *utils.ReturnType {
+func (f *Function) Exec(Env *env.Env) *utils.ReturnValue {
 	return nil
 }

@@ -8,5 +8,5 @@ import (
 type Instruction interface {
 	LineN() int
 	ColumnN() int
-	Exec(env *env.Env) *utils.ReturnType
+	Exec(env *env.Env) *utils.ReturnValue
 }

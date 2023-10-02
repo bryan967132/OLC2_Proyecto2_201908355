@@ -26,6 +26,6 @@ func (ct *Cast) ColumnN() int {
 	return ct.Column
 }
 
-func (ct *Cast) Exec(env *env.Env) *utils.ReturnType {
-	return &utils.ReturnType{Value: "nil", Type: utils.NIL}
+func (ct *Cast) Exec(env *env.Env) *utils.ReturnValue {
+	return nil
 }

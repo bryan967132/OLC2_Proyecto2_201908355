@@ -26,6 +26,6 @@ func (g *Guard) ColumnN() int {
 	return g.Column
 }
 
-func (g *Guard) Exec(Env *env.Env) *utils.ReturnType {
+func (g *Guard) Exec(Env *env.Env) *utils.ReturnValue {
 	return nil
 }

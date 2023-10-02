@@ -28,6 +28,6 @@ func (ar *Arithmetic) ColumnN() int {
 	return ar.Column
 }
 
-func (ar *Arithmetic) Exec(env *env.Env) *utils.ReturnType {
-	return &utils.ReturnType{Value: "nil", Type: utils.NIL}
+func (ar *Arithmetic) Exec(env *env.Env) *utils.ReturnValue {
+	return nil
 }

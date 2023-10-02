@@ -27,6 +27,6 @@ func (rl *Relational) ColumnN() int {
 	return rl.Column
 }
 
-func (rl *Relational) Exec(env *env.Env) *utils.ReturnType {
-	return &utils.ReturnType{Value: "nil", Type: utils.NIL}
+func (rl *Relational) Exec(env *env.Env) *utils.ReturnValue {
+	return nil
 }

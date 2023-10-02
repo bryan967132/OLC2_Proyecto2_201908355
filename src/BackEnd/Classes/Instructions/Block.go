@@ -24,6 +24,6 @@ func (bk *Block) ColumnN() int {
 	return bk.Column
 }
 
-func (bk *Block) Exec(Env *env.Env) *utils.ReturnType {
+func (bk *Block) Exec(Env *env.Env) *utils.ReturnValue {
 	return nil
 }

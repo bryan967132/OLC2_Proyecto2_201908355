@@ -25,6 +25,6 @@ func (c *CallFunction) ColumnN() int {
 	return c.Column
 }
 
-func (c *CallFunction) Exec(Env *env.Env) *utils.ReturnType {
+func (c *CallFunction) Exec(Env *env.Env) *utils.ReturnValue {
 	return nil
 }

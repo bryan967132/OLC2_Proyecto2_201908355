@@ -10,5 +10,5 @@ type Function interface {
 	ColumnN() int
 	GetParams() []utils.Param
 	GetBlock() Instruction
-	Exec(Env *env.Env) *utils.ReturnType
+	Exec(Env *env.Env) *utils.ReturnValue
 }

@@ -23,6 +23,6 @@ func (b *Break) ColumnN() int {
 	return b.Column
 }
 
-func (b *Break) Exec(env *env.Env) *utils.ReturnType {
-	return &utils.ReturnType{Value: b.TypeInst, Type: utils.NIL}
+func (b *Break) Exec(env *env.Env) *utils.ReturnValue {
+	return nil
 }

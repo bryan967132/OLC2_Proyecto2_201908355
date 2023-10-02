@@ -28,6 +28,6 @@ func (in *InitVector) ColumnN() int {
 	return in.Column
 }
 
-func (in *InitVector) Exec(env *env.Env) *utils.ReturnType {
+func (in *InitVector) Exec(env *env.Env) *utils.ReturnValue {
 	return nil
 }

@@ -24,6 +24,6 @@ func (ac *AccessID) ColumnN() int {
 	return ac.Column
 }
 
-func (ac *AccessID) Exec(env *env.Env) *utils.ReturnType {
-	return &utils.ReturnType{Value: "nil", Type: utils.NIL}
+func (ac *AccessID) Exec(env *env.Env) *utils.ReturnValue {
+	return nil
 }

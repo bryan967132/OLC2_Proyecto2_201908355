@@ -3,7 +3,6 @@ package expressions
 import (
 	env "TSwift/Classes/Env"
 	utils "TSwift/Classes/Utils"
-	"fmt"
 )
 
 type Primitive struct {
@@ -26,6 +25,11 @@ func (ar *Primitive) ColumnN() int {
 	return ar.Column
 }
 
-func (pr *Primitive) Exec(env *env.Env) *utils.ReturnType {
-	return &utils.ReturnType{Value: fmt.Sprintf("%v", pr.Value), Type: pr.Type}
+func (pr *Primitive) Exec(env *env.Env) *utils.ReturnValue {
+
+	switch pr.Type {
+	case utils.INT:
+	case utils.FLOAT:
+	}
+	return nil
 }

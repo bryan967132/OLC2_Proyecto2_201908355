@@ -28,6 +28,6 @@ func (in *InitID) ColumnN() int {
 	return in.Column
 }
 
-func (in *InitID) Exec(env *env.Env) *utils.ReturnType {
+func (in *InitID) Exec(env *env.Env) *utils.ReturnValue {
 	return nil
 }

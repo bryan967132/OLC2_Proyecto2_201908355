@@ -24,6 +24,6 @@ func (r *RemoveLast) ColumnN() int {
 	return r.Column
 }
 
-func (r *RemoveLast) Exec(env *env.Env) *utils.ReturnType {
+func (r *RemoveLast) Exec(env *env.Env) *utils.ReturnValue {
 	return nil
 }

@@ -27,6 +27,6 @@ func (ac *AsignPosArray) ColumnN() int {
 	return ac.Column
 }
 
-func (ac *AsignPosArray) Exec(env *env.Env) *utils.ReturnType {
+func (ac *AsignPosArray) Exec(env *env.Env) *utils.ReturnValue {
 	return nil
 }

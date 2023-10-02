@@ -29,6 +29,6 @@ func (f *For) ColumnN() int {
 	return f.Column
 }
 
-func (f *For) Exec(Env *env.Env) *utils.ReturnType {
+func (f *For) Exec(Env *env.Env) *utils.ReturnValue {
 	return nil
 }

@@ -25,6 +25,6 @@ func (r *Return) ColumnN() int {
 	return r.Column
 }
 
-func (r *Return) Exec(env *env.Env) *utils.ReturnType {
-	return &utils.ReturnType{Value: r.TypeExp, Type: utils.NIL}
+func (r *Return) Exec(env *env.Env) *utils.ReturnValue {
+	return nil
 }

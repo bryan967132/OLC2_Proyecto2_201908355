@@ -25,6 +25,6 @@ func (i *IsEmpty) ColumnN() int {
 	return i.Column
 }
 
-func (i *IsEmpty) Exec(env *env.Env) *utils.ReturnType {
-	return &utils.ReturnType{Value: "nil", Type: utils.NIL}
+func (i *IsEmpty) Exec(env *env.Env) *utils.ReturnValue {
+	return nil
 }
