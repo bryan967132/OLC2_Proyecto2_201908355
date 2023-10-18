@@ -2,6 +2,7 @@ package expressions
 
 import (
 	env "TSwift/Classes/Env"
+	C3DGen "TSwift/Classes/Generator"
 	utils "TSwift/Classes/Utils"
 )
 
@@ -25,6 +26,6 @@ func (c *CallFunction) ColumnN() int {
 	return c.Column
 }
 
-func (c *CallFunction) Exec(Env *env.Env) *utils.ReturnValue {
+func (c *CallFunction) Exec(Env *env.Env, c3dgen *C3DGen.C3DGen) *utils.ReturnValue {
 	return nil
 }

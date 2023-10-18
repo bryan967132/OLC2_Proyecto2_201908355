@@ -2,6 +2,7 @@ package expressions
 
 import (
 	env "TSwift/Classes/Env"
+	C3DGen "TSwift/Classes/Generator"
 	utils "TSwift/Classes/Utils"
 )
 
@@ -17,19 +18,21 @@ func NewPrimitive(line, column int, value interface{}, typeD utils.Type) *Primit
 	return &Primitive{line, column, utils.PRIMITIVE, value, typeD}
 }
 
-func (ar *Primitive) LineN() int {
-	return ar.Line
+func (pr *Primitive) LineN() int {
+	return pr.Line
 }
 
-func (ar *Primitive) ColumnN() int {
-	return ar.Column
+func (pr *Primitive) ColumnN() int {
+	return pr.Column
 }
 
-func (pr *Primitive) Exec(env *env.Env) *utils.ReturnValue {
-
+func (pr *Primitive) Exec(env *env.Env, c3dgen *C3DGen.C3DGen) *utils.ReturnValue {
 	switch pr.Type {
 	case utils.INT:
 	case utils.FLOAT:
+	case utils.BOOLEAN:
+	case utils.NIL:
+	default:
 	}
 	return nil
 }

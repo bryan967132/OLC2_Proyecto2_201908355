@@ -2,6 +2,7 @@ package expressions
 
 import (
 	env "TSwift/Classes/Env"
+	C3DGen "TSwift/Classes/Generator"
 	interfaces "TSwift/Classes/Interfaces"
 	utils "TSwift/Classes/Utils"
 )
@@ -28,6 +29,6 @@ func (ar *Arithmetic) ColumnN() int {
 	return ar.Column
 }
 
-func (ar *Arithmetic) Exec(env *env.Env) *utils.ReturnValue {
+func (ar *Arithmetic) Exec(env *env.Env, c3dgen *C3DGen.C3DGen) *utils.ReturnValue {
 	return nil
 }
