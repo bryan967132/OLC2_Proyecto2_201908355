@@ -8,12 +8,13 @@ import (
 type Env struct {
 	Ids       *map[string]*Symbol
 	Functions *map[string]*interface{}
+	Size      *map[string]int
 	previous  *Env
 	Name      string
 }
 
 func NewEnv(previous *Env, name string) *Env {
-	return &Env{&map[string]*Symbol{}, &map[string]*interface{}{}, previous, name}
+	return &Env{&map[string]*Symbol{}, &map[string]*interface{}{}, &map[string]int{}, previous, name}
 }
 
 func (env *Env) PrintPrints() {
