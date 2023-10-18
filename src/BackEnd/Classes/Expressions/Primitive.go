@@ -33,11 +33,12 @@ func (pr *Primitive) Exec(env *env.Env, c3dgen *C3DGen.C3DGen) *utils.ReturnValu
 	switch pr.Type {
 	case utils.INT:
 		intValue, _ := strconv.Atoi(pr.Value.(string))
-		return &utils.ReturnValue{StrValue: fmt.Sprintf("%v", pr.Value), IntValue: intValue, IsTmp: false, Type: pr.Type}
+		return &utils.ReturnValue{StrValue: fmt.Sprintf("%v", pr.Value), NumValue: intValue, IsTmp: false, Type: pr.Type}
 	case utils.FLOAT:
-		return &utils.ReturnValue{StrValue: fmt.Sprintf("%v", pr.Value), IsTmp: false, Type: pr.Type}
+		fltValue, _ := strconv.ParseFloat(pr.Value.(string), 64)
+		return &utils.ReturnValue{StrValue: fmt.Sprintf("%v", pr.Value), NumValue: fltValue, IsTmp: false, Type: pr.Type}
 	case utils.BOOLEAN:
-		c3dgen.AddComment("------ Boolean Primitive ------")
+		c3dgen.AddComment("---- Boolean Primitive ----")
 		trueLbl := c3dgen.NewLabel()
 		falseLbl := c3dgen.NewLabel()
 		if pr.Value.(string) == "true" {
@@ -55,7 +56,7 @@ func (pr *Primitive) Exec(env *env.Env, c3dgen *C3DGen.C3DGen) *utils.ReturnValu
 		pr.Value = strings.ReplaceAll(fmt.Sprintf("%v", pr.Value), "\\\"", "\"")
 		pr.Value = strings.ReplaceAll(fmt.Sprintf("%v", pr.Value), "\\'", "'")
 		pr.Value = strings.ReplaceAll(fmt.Sprintf("%v", pr.Value), "\\\\", "\\")
-		c3dgen.AddComment("------ String Primitive ------")
+		c3dgen.AddComment("---- String Primitive -----")
 		newTemp := c3dgen.NewTemp()
 		c3dgen.AddAssign(newTemp, "H")
 		for _, asc := range []byte(pr.Value.(string)) {
