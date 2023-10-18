@@ -224,7 +224,7 @@ func (g *C3DGen) GenerateFinalCode() {
 	}
 	// FUNCTIONS
 	if len(g.C3DFunctions) > 0 {
-		g.C3DCode = append(g.C3DCode, "/*------ FUNCTIONS ------ */")
+		g.C3DCode = append(g.C3DCode, "/* ------ FUNCTIONS ------ */")
 		for _, s := range g.C3DFunctions {
 			g.C3DCode = append(g.C3DCode, s)
 		}
