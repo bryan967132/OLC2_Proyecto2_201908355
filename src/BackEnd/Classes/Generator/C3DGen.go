@@ -201,8 +201,8 @@ func (g *C3DGen) GenerateFinalCode() {
 	g.C3DCode = append(g.C3DCode, "")
 	g.C3DCode = append(g.C3DCode, "float heap[30101999];")
 	g.C3DCode = append(g.C3DCode, "float stack[30101999];")
-	g.C3DCode = append(g.C3DCode, "float P = 0;")
-	g.C3DCode = append(g.C3DCode, "float H = 0;")
+	g.C3DCode = append(g.C3DCode, "float P;")
+	g.C3DCode = append(g.C3DCode, "float H;")
 	// TEMPORALS
 	tempArr := g.GetTemps()
 	if len(tempArr) > 0 {
@@ -232,6 +232,8 @@ func (g *C3DGen) GenerateFinalCode() {
 	// MAIN
 	g.C3DCode = append(g.C3DCode, "/* ------ MAIN ------ */")
 	g.C3DCode = append(g.C3DCode, "int main() {")
+	g.C3DCode = append(g.C3DCode, "\tP = 0;")
+	g.C3DCode = append(g.C3DCode, "\tH = 0;")
 	for _, s := range g.C3DInstructions {
 		g.C3DCode = append(g.C3DCode, s)
 	}
