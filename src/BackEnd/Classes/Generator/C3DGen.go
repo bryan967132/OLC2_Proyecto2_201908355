@@ -85,9 +85,27 @@ func (g *C3DGen) AddGoto(Label string) {
 
 func (g *C3DGen) AddExpression(target string, left string, operator string, right string) {
 	if g.MainC3DCode {
-		g.C3DInstructions = append(g.C3DInstructions, "\t"+target+" = "+left+" "+operator+" "+right+";")
+		if left != "" {
+			g.C3DInstructions = append(g.C3DInstructions, "\t"+target+" = "+left+" "+operator+" "+right+";")
+		} else {
+			g.C3DInstructions = append(g.C3DInstructions, "\t"+target+" = "+operator+" "+right+";")
+
+		}
 	} else {
-		g.C3DFunctions = append(g.C3DFunctions, "\t"+target+" = "+left+" "+operator+" "+right+";")
+		if left != "" {
+			g.C3DFunctions = append(g.C3DFunctions, "\t"+target+" = "+left+" "+operator+" "+right+";")
+		} else {
+			g.C3DFunctions = append(g.C3DFunctions, "\t"+target+" = "+operator+" "+right+";")
+
+		}
+	}
+}
+
+func (g *C3DGen) AddExpressionInit(target string, value string) {
+	if g.MainC3DCode {
+		g.C3DInstructions = append(g.C3DInstructions, "\t"+target+" = "+value+";")
+	} else {
+		g.C3DFunctions = append(g.C3DFunctions, "\t"+target+" = "+value+";")
 	}
 }
 
