@@ -2,7 +2,7 @@ package utils
 
 type ReturnValue struct {
 	StrValue   string
-	IntValue   int
+	NumValue   interface{}
 	IsTmp      bool
 	Type       Type
 	TrueLabel  []string
