@@ -30,7 +30,11 @@ func (prt *Print) ColumnN() int {
 
 func (prt *Print) Exec(env *env.Env, c3dgen *C3DGen.C3DGen) *utils.ReturnValue {
 	if prt.Exps != nil {
+		flag := false
 		for _, exp := range prt.Exps {
+			if flag {
+				c3dgen.AddPrint(" ")
+			}
 			value1 := exp.Exec(env, c3dgen)
 			if value1.Type == utils.INT {
 				c3dgen.AddComment("------ Print Int ------")
@@ -53,7 +57,7 @@ func (prt *Print) Exec(env *env.Env, c3dgen *C3DGen.C3DGen) *utils.ReturnValue {
 				c3dgen.AddComment("------ Print false ------")
 				c3dgen.AddPrint("false")
 				c3dgen.AddLabel(newLabel)
-			} else if value1.Type == utils.STRING {
+			} else if value1.Type == utils.STRING || value1.Type == utils.CHAR {
 				c3dgen.GeneratePrintString()
 				newTemp1 := c3dgen.NewTemp()
 				newTemp2 := c3dgen.NewTemp()
@@ -70,6 +74,7 @@ func (prt *Print) Exec(env *env.Env, c3dgen *C3DGen.C3DGen) *utils.ReturnValue {
 				c3dgen.AddComment("------ Print nil ------")
 				c3dgen.AddPrint("nil")
 			}
+			flag = true
 		}
 	}
 	c3dgen.AddPrint("\n")
