@@ -2,6 +2,7 @@ package instructions
 
 import (
 	env "TSwift/Classes/Env"
+	C3DGen "TSwift/Classes/Generator"
 	interfaces "TSwift/Classes/Interfaces"
 	utils "TSwift/Classes/Utils"
 )
@@ -32,6 +33,6 @@ func (c *Case) SetCase(caseEvaluate *utils.ReturnValue) {
 	c.CaseEvaluate = caseEvaluate
 }
 
-func (c *Case) Exec(Env *env.Env) *utils.ReturnValue {
+func (c *Case) Exec(Env *env.Env, c3dgen *C3DGen.C3DGen) *utils.ReturnValue {
 	return nil
 }

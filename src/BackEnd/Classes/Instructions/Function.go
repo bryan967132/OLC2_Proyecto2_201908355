@@ -2,6 +2,7 @@ package instructions
 
 import (
 	env "TSwift/Classes/Env"
+	C3DGen "TSwift/Classes/Generator"
 	interfaces "TSwift/Classes/Interfaces"
 	utils "TSwift/Classes/Utils"
 )
@@ -36,6 +37,6 @@ func (f *Function) GetBlock() interfaces.Instruction {
 	return f.Block
 }
 
-func (f *Function) Exec(Env *env.Env) *utils.ReturnValue {
+func (f *Function) Exec(Env *env.Env, c3dgen *C3DGen.C3DGen) *utils.ReturnValue {
 	return nil
 }

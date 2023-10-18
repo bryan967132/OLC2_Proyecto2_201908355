@@ -2,6 +2,7 @@ package instructions
 
 import (
 	env "TSwift/Classes/Env"
+	C3DGen "TSwift/Classes/Generator"
 	utils "TSwift/Classes/Utils"
 )
 
@@ -23,6 +24,6 @@ func (b *Break) ColumnN() int {
 	return b.Column
 }
 
-func (b *Break) Exec(env *env.Env) *utils.ReturnValue {
+func (b *Break) Exec(env *env.Env, c3dgen *C3DGen.C3DGen) *utils.ReturnValue {
 	return nil
 }

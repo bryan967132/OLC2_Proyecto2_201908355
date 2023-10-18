@@ -2,6 +2,7 @@ package instructions
 
 import (
 	env "TSwift/Classes/Env"
+	C3DGen "TSwift/Classes/Generator"
 	utils "TSwift/Classes/Utils"
 )
 
@@ -24,6 +25,6 @@ func (r *RemoveLast) ColumnN() int {
 	return r.Column
 }
 
-func (r *RemoveLast) Exec(env *env.Env) *utils.ReturnValue {
+func (r *RemoveLast) Exec(env *env.Env, c3dgen *C3DGen.C3DGen) *utils.ReturnValue {
 	return nil
 }

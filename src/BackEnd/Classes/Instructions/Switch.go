@@ -2,6 +2,7 @@ package instructions
 
 import (
 	env "TSwift/Classes/Env"
+	C3DGen "TSwift/Classes/Generator"
 	interfaces "TSwift/Classes/Interfaces"
 	utils "TSwift/Classes/Utils"
 )
@@ -27,6 +28,6 @@ func (s *Switch) ColumnN() int {
 	return s.Column
 }
 
-func (s *Switch) Exec(Env *env.Env) *utils.ReturnValue {
+func (s *Switch) Exec(Env *env.Env, c3dgen *C3DGen.C3DGen) *utils.ReturnValue {
 	return nil
 }

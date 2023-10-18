@@ -2,6 +2,7 @@ package instructions
 
 import (
 	env "TSwift/Classes/Env"
+	C3DGen "TSwift/Classes/Generator"
 	utils "TSwift/Classes/Utils"
 	vector "TSwift/Classes/Vector"
 )
@@ -28,7 +29,7 @@ func (in *InitMatrix) ColumnN() int {
 	return in.Column
 }
 
-func (in *InitMatrix) Exec(env *env.Env) *utils.ReturnValue {
+func (in *InitMatrix) Exec(env *env.Env, c3dgen *C3DGen.C3DGen) *utils.ReturnValue {
 	return nil
 }
 
