@@ -237,18 +237,20 @@ func (ar *Arithmetic) mod(env *env.Env, c3dgen *C3DGen.C3DGen) *utils.ReturnValu
 		if ar.Type == utils.INT || ar.Type == utils.FLOAT {
 			newLbl1 := c3dgen.NewLabel()
 			newLbl2 := c3dgen.NewLabel()
-			c3dgen.AddIf(value2.StrValue, "0", "!=", newLbl1)
+			newTemp1 := c3dgen.NewTemp()
+			c3dgen.AddExpressionInit(newTemp1, value2.StrValue)
+			c3dgen.AddIf(newTemp1, "0", "!=", newLbl1)
 			c3dgen.AddPrint("MathError")
-			newTemp := c3dgen.NewTemp()
-			c3dgen.AddExpressionInit(newTemp, "0")
+			newTemp2 := c3dgen.NewTemp()
+			c3dgen.AddExpressionInit(newTemp2, "0")
 			c3dgen.AddGoto(newLbl2)
 			c3dgen.AddLabel(newLbl1)
-			c3dgen.AddExpression(newTemp, value1.StrValue, "%", value2.StrValue)
+			c3dgen.AddExpression(newTemp2, value1.StrValue, "%", "(int) "+newTemp1)
 			c3dgen.AddLabel(newLbl2)
 			if value2.NumValue.(int) == 0 {
 				env.SetError("División entre cero", ar.Exp2.LineN(), ar.Exp2.ColumnN())
 			}
-			return &utils.ReturnValue{StrValue: newTemp, Type: ar.Type}
+			return &utils.ReturnValue{StrValue: newTemp2, Type: ar.Type}
 		}
 	}
 	env.SetError("Los tipos no son válidos para operaciones aritméticas", ar.Exp2.LineN(), ar.Exp2.ColumnN())
