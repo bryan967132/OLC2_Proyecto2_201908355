@@ -14,7 +14,30 @@ type Env struct {
 }
 
 func NewEnv(previous *Env, name string) *Env {
-	return &Env{&map[string]*Symbol{}, &map[string]*interface{}{}, &map[string]int{}, previous, name}
+	return &Env{&map[string]*Symbol{}, &map[string]*interface{}{}, &map[string]int{"size": 0}, previous, name}
+}
+
+func (env *Env) SaveID(isVariable bool, id string, value *utils.ReturnValue, Type utils.Type, line, column int) *Symbol {
+	if _, exists := (*env.Ids)[id]; !exists {
+		(*env.Ids)[id] = &Symbol{IsVariable: isVariable, IsPrimitive: true, Id: id, Type: Type, Position: (*env.Size)["size"]}
+		SymTable.Push(NewSymTab(line, column+1, isVariable, true, id, env.Name, Type, utils.NIL))
+		(*env.Size)["size"] += 1
+		return (*env.Ids)[id]
+	}
+	env.SetError("Redeclaración de variable existente", line, column)
+	return nil
+}
+
+func (env *Env) GetValueID(id string, line, column int) *Symbol {
+	var current *Env = env
+	for current != nil {
+		if symbol, exists := (*current.Ids)[id]; exists {
+			return symbol
+		}
+		current = current.previous
+	}
+	current.SetError(fmt.Sprintf("Acceso a variable inexistente. '%s'", id), line, column)
+	return nil
 }
 
 func (env *Env) PrintPrints() {
