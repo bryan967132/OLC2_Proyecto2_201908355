@@ -5,6 +5,7 @@ import (
 	C3DGen "TSwift/Classes/Generator"
 	interfaces "TSwift/Classes/Interfaces"
 	utils "TSwift/Classes/Utils"
+	"strconv"
 )
 
 type AsignID struct {
@@ -28,5 +29,15 @@ func (as *AsignID) ColumnN() int {
 }
 
 func (as *AsignID) Exec(env *env.Env, c3dgen *C3DGen.C3DGen) *utils.ReturnValue {
-	return nil
+	c3dgen.AddComment("------- Asignacion --------")
+	variable := env.GetValueID(as.Id, as.Line, as.Column)
+	if variable != nil {
+		value := as.Value.Exec(env, c3dgen)
+		c3dgen.AddSetStack(strconv.Itoa(variable.Position), value.StrValue)
+		c3dgen.AddComment("---------------------------")
+		return nil
+	}
+	c3dgen.AddComment("---------------------------")
+	env.SetError("Resignación de valor a variable inexistente", as.Line, as.Column)
+	return &utils.ReturnValue{IsTmp: false, Type: utils.NIL}
 }

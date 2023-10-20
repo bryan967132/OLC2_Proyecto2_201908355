@@ -85,15 +85,23 @@ func (ar *Arithmetic) plus(env *env.Env, c3dgen *C3DGen.C3DGen) *utils.ReturnVal
 			return &utils.ReturnValue{StrValue: newTemp, NumValue: fltValue1 + fltValue2, IsTmp: true, Type: ar.Type}
 		}
 		if ar.Type == utils.STRING {
-			newTemp := c3dgen.NewTemp()
-			c3dgen.AddAssign(newTemp, "H")
-			for _, asc := range []byte(fmt.Sprintf("%v%v", value1.StrValue, value2.StrValue)) {
-				c3dgen.AddSetHeap("(int) H", strconv.Itoa(int(asc)))
-				c3dgen.AddExpression("H", "H", "+", "1")
-			}
-			c3dgen.AddSetHeap("(int) H", "-1")
-			c3dgen.AddExpression("H", "H", "+", "1")
-			return &utils.ReturnValue{StrValue: fmt.Sprintf("%v%v", value1.StrValue, value2.StrValue), IsTmp: true, Type: ar.Type}
+			c3dgen.GenerateConcatString()
+			paramTemp := c3dgen.NewTemp()
+			c3dgen.AddExpression(paramTemp, "P", "+", fmt.Sprintf("%v", (*env.Size)["size"]))
+			c3dgen.AddExpression(paramTemp, paramTemp, "+", "1")
+			c3dgen.AddSetStack("(int) "+paramTemp, value1.StrValue)
+
+			c3dgen.AddExpression(paramTemp, paramTemp, "+", "1")
+			c3dgen.AddSetStack("(int) "+paramTemp, value2.StrValue)
+
+			c3dgen.NewEnv((*env.Size)["size"])
+			c3dgen.AddCall("concatString")
+
+			temp := c3dgen.NewTemp()
+			c3dgen.AddGetStack(temp, "(int) P")
+			c3dgen.PrevEnv((*env.Size)["size"])
+
+			return &utils.ReturnValue{StrValue: temp, IsTmp: true, Type: ar.Type}
 		}
 	}
 	env.SetError("Los tipos no son válidos para operaciones aritméticas", ar.Exp2.LineN(), ar.Exp2.ColumnN())
