@@ -11,13 +11,14 @@ type C3DGen struct {
 	C3DFunctions    []string
 	Temporals       []string
 	PrintString     bool
+	ConcatString    bool
 	MainC3DCode     bool
 	BreakLabel      string
 	ContinueLabel   string
 }
 
 func NewC3DGen() *C3DGen {
-	return &C3DGen{TemporalCount: 0, LabelCount: 0, BreakLabel: "", ContinueLabel: "", PrintString: true, MainC3DCode: true}
+	return &C3DGen{TemporalCount: 0, LabelCount: 0, BreakLabel: "", ContinueLabel: "", PrintString: true, ConcatString: true, MainC3DCode: true}
 }
 
 func (g *C3DGen) GetCode() []string {
@@ -181,6 +182,22 @@ func (g *C3DGen) AddBr() {
 	}
 }
 
+func (g *C3DGen) NewEnv(size int) {
+	if g.MainC3DCode {
+		g.C3DInstructions = append(g.C3DInstructions, fmt.Sprintf("\tP = P + %v;", size))
+	} else {
+		g.C3DFunctions = append(g.C3DFunctions, fmt.Sprintf("\tP = P + %v;", size))
+	}
+}
+
+func (g *C3DGen) PrevEnv(size int) {
+	if g.MainC3DCode {
+		g.C3DInstructions = append(g.C3DInstructions, fmt.Sprintf("\tP = P - %v;", size))
+	} else {
+		g.C3DFunctions = append(g.C3DFunctions, fmt.Sprintf("\tP = P - %v;", size))
+	}
+}
+
 func (g *C3DGen) AddPrint(value string) {
 	for _, c := range value {
 		g.AddPrintf("c", fmt.Sprintf("(char) %d", byte(c)))
@@ -189,26 +206,69 @@ func (g *C3DGen) AddPrint(value string) {
 
 func (g *C3DGen) GeneratePrintString() {
 	if g.PrintString {
-		//generando temporales y etiquetas
+		// Temporales y Etiquetas
 		newTemp1 := g.NewTemp()
 		newTemp2 := g.NewTemp()
 		newTemp3 := g.NewTemp()
-		newLvl1 := g.NewLabel()
-		newLvl2 := g.NewLabel()
-		//se genera la funcion printstring
+		newLbl1 := g.NewLabel()
+		newLbl2 := g.NewLabel()
+		// Función printString
 		g.C3DNatives = append(g.C3DNatives, "void printString() {")
 		g.C3DNatives = append(g.C3DNatives, "\t"+newTemp1+" = P + 1;")
 		g.C3DNatives = append(g.C3DNatives, "\t"+newTemp2+" = stack[(int) "+newTemp1+"];")
-		g.C3DNatives = append(g.C3DNatives, newLvl1+":")
+		g.C3DNatives = append(g.C3DNatives, newLbl1+":")
 		g.C3DNatives = append(g.C3DNatives, "\t"+newTemp3+" = heap[(int) "+newTemp2+"];")
-		g.C3DNatives = append(g.C3DNatives, "\tif("+newTemp3+" == -1) goto "+newLvl2+";")
+		g.C3DNatives = append(g.C3DNatives, "\tif("+newTemp3+" == -1) goto "+newLbl2+";")
 		g.C3DNatives = append(g.C3DNatives, "\tprintf(\"%c\", (char) "+newTemp3+");")
 		g.C3DNatives = append(g.C3DNatives, "\t"+newTemp2+" = "+newTemp2+" + 1;")
-		g.C3DNatives = append(g.C3DNatives, "\tgoto "+newLvl1+";")
-		g.C3DNatives = append(g.C3DNatives, newLvl2+":")
+		g.C3DNatives = append(g.C3DNatives, "\tgoto "+newLbl1+";")
+		g.C3DNatives = append(g.C3DNatives, newLbl2+":")
 		g.C3DNatives = append(g.C3DNatives, "\treturn;")
 		g.C3DNatives = append(g.C3DNatives, "}\n")
 		g.PrintString = false
+	}
+}
+
+func (g *C3DGen) GenerateConcatString() {
+	if g.ConcatString {
+		// Temporales y Etiquetas
+		newTemp1 := g.NewTemp()
+		newTemp2 := g.NewTemp()
+		newTemp3 := g.NewTemp()
+		newTemp4 := g.NewTemp()
+		newLbl1 := g.NewLabel()
+		newLbl2 := g.NewLabel()
+		newLbl3 := g.NewLabel()
+		newLbl4 := g.NewLabel()
+		// Función concatString
+		g.C3DNatives = append(g.C3DNatives, "void concatString() {")
+		g.C3DNatives = append(g.C3DNatives, "\t"+newTemp1+" = H;")
+		g.C3DNatives = append(g.C3DNatives, "\t"+newTemp2+" = P + 1;")
+		g.C3DNatives = append(g.C3DNatives, "\t"+newTemp3+" = stack[(int) "+newTemp2+"];")
+		g.C3DNatives = append(g.C3DNatives, newLbl1+":")
+		g.C3DNatives = append(g.C3DNatives, "\t"+newTemp4+" = heap[(int) "+newTemp3+"];")
+		g.C3DNatives = append(g.C3DNatives, "\tif("+newTemp4+" == -1) goto "+newLbl2+";")
+		g.C3DNatives = append(g.C3DNatives, "\theap[(int) H] = "+newTemp4+";")
+		g.C3DNatives = append(g.C3DNatives, "\tH = H + 1;")
+		g.C3DNatives = append(g.C3DNatives, "\t"+newTemp3+" = "+newTemp3+" + 1;")
+		g.C3DNatives = append(g.C3DNatives, "\tgoto "+newLbl1+";")
+		g.C3DNatives = append(g.C3DNatives, newLbl2+":")
+		g.C3DNatives = append(g.C3DNatives, "\t"+newTemp2+" = P + 2;")
+		g.C3DNatives = append(g.C3DNatives, "\t"+newTemp3+" = stack[(int) "+newTemp2+"];")
+		g.C3DNatives = append(g.C3DNatives, newLbl3+":")
+		g.C3DNatives = append(g.C3DNatives, "\t"+newTemp4+" = heap[(int) "+newTemp3+"];")
+		g.C3DNatives = append(g.C3DNatives, "\tif("+newTemp4+" == -1) goto "+newLbl4+";")
+		g.C3DNatives = append(g.C3DNatives, "\theap[(int) H] = "+newTemp4+";")
+		g.C3DNatives = append(g.C3DNatives, "\tH = H + 1;")
+		g.C3DNatives = append(g.C3DNatives, "\t"+newTemp3+" = "+newTemp3+" + 1;")
+		g.C3DNatives = append(g.C3DNatives, "\tgoto "+newLbl3+";")
+		g.C3DNatives = append(g.C3DNatives, newLbl4+":")
+		g.C3DNatives = append(g.C3DNatives, "\theap[(int) H] = -1;")
+		g.C3DNatives = append(g.C3DNatives, "\tH = H + 1;")
+		g.C3DNatives = append(g.C3DNatives, "\tstack[(int) P] = "+newTemp1+";")
+		g.C3DNatives = append(g.C3DNatives, "\treturn;")
+		g.C3DNatives = append(g.C3DNatives, "}\n")
+		g.ConcatString = false
 	}
 }
 
