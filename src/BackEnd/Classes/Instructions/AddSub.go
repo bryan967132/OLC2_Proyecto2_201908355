@@ -2,6 +2,7 @@ package instructions
 
 import (
 	env "TSwift/Classes/Env"
+	expressions "TSwift/Classes/Expressions"
 	C3DGen "TSwift/Classes/Generator"
 	interfaces "TSwift/Classes/Interfaces"
 	utils "TSwift/Classes/Utils"
@@ -32,5 +33,28 @@ func (a *AddSub) ColumnN() int {
 }
 
 func (a *AddSub) Exec(env *env.Env, c3dgen *C3DGen.C3DGen) *utils.ReturnValue {
+	value := env.GetValueID(a.Id, a.Line, a.Column)
+	if value != nil {
+		switch a.Sign {
+		case "+=":
+			c3dgen.AddComment("--------- AddSub ----------")
+			NewAsignID(a.Line, a.Column,
+				a.Id,
+				expressions.NewArithmetic(a.Exp.LineN(), a.Exp.ColumnN(),
+					expressions.NewAccessID(a.Exp.LineN(), a.Exp.ColumnN(), a.Id),
+					"+",
+					a.Exp)).Exec(env, c3dgen)
+			c3dgen.AddComment("---------------------------")
+		case "-=":
+			c3dgen.AddComment("--------- AddSub ----------")
+			NewAsignID(a.Line, a.Column,
+				a.Id,
+				expressions.NewArithmetic(a.Exp.LineN(), a.Exp.ColumnN(),
+					expressions.NewAccessID(a.Exp.LineN(), a.Exp.ColumnN(), a.Id),
+					"-",
+					a.Exp)).Exec(env, c3dgen)
+			c3dgen.AddComment("---------------------------")
+		}
+	}
 	return nil
 }

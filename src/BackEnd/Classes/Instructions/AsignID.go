@@ -33,7 +33,9 @@ func (as *AsignID) Exec(env *env.Env, c3dgen *C3DGen.C3DGen) *utils.ReturnValue 
 	variable := env.GetValueID(as.Id, as.Line, as.Column)
 	if variable != nil {
 		value := as.Value.Exec(env, c3dgen)
-		c3dgen.AddSetStack(strconv.Itoa(variable.Position), value.StrValue)
+		newTemp := c3dgen.NewTemp()
+		c3dgen.AddExpression(newTemp, newTemp, "+", strconv.Itoa(variable.Position))
+		c3dgen.AddSetStack("(int) "+newTemp, value.StrValue)
 		c3dgen.AddComment("---------------------------")
 		return nil
 	}
