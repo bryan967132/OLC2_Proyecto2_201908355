@@ -29,5 +29,42 @@ func (i *If) ColumnN() int {
 }
 
 func (i *If) Exec(Env *env.Env, c3dgen *C3DGen.C3DGen) *utils.ReturnValue {
+	c3dgen.AddComment("----------- If ------------")
+	condition := i.Condition.Exec(Env, c3dgen)
+	if condition.Type == utils.BOOLEAN {
+		newLabel := c3dgen.NewLabel()
+		for _, lbl := range condition.TrueLabel {
+			c3dgen.AddLabel(lbl)
+		}
+		block := i.Block.Exec(Env, c3dgen)
+
+		block.OutLabel = append(block.OutLabel, newLabel)
+		for _, lbl := range block.OutLabel {
+			c3dgen.AddGoto(lbl)
+		}
+
+		for _, lbl := range condition.FalseLabel {
+			c3dgen.AddLabel(lbl)
+		}
+
+		copyOutLabel := []string{}
+		for _, lbl := range block.OutLabel {
+			copyOutLabel = append(copyOutLabel, lbl)
+		}
+
+		// else
+		if i.Except != nil {
+			except := i.Except.Exec(Env, c3dgen)
+			for _, lbl := range except.OutLabel {
+				copyOutLabel = append(copyOutLabel, lbl)
+			}
+		}
+
+		c3dgen.AddLabel(newLabel)
+		c3dgen.AddComment("---------------------------")
+		return &utils.ReturnValue{OutLabel: copyOutLabel}
+	}
+	c3dgen.AddComment("---------------------------")
+	Env.SetError("No se evalúa una expresión lógica o relacional como condicion", i.Line, i.Column)
 	return nil
 }
