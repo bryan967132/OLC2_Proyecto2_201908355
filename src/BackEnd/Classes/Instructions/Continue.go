@@ -10,10 +10,11 @@ type Continue struct {
 	Line     int
 	Column   int
 	TypeInst utils.TypeInst
+	Tag      string
 }
 
 func NewContinue(line, column int) *Continue {
-	return &Continue{line, column, utils.CONTINUE}
+	return &Continue{Line: line, Column: column, TypeInst: utils.CONTINUE}
 }
 
 func (c *Continue) LineN() int {
@@ -25,5 +26,10 @@ func (c *Continue) ColumnN() int {
 }
 
 func (c *Continue) Exec(env *env.Env, c3dgen *C3DGen.C3DGen) *utils.ReturnValue {
+	c3dgen.AddComment("-------- Continue ---------")
+	for _, lbl := range env.ContinueLbl {
+		c3dgen.AddGoto(lbl)
+	}
+	c3dgen.AddComment("---------------------------")
 	return nil
 }

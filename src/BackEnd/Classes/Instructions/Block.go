@@ -28,6 +28,8 @@ func (bk *Block) ColumnN() int {
 
 func (bk *Block) Exec(Env *env.Env, c3dgen *C3DGen.C3DGen) *utils.ReturnValue {
 	newEnv := env.NewEnv(Env, Env.Name)
+	newEnv.ContinueLbl = Env.ContinueLbl
+	newEnv.BreakLbl = Env.BreakLbl
 	var ret *utils.ReturnValue
 	var inst interfaces.Instruction
 	outlbl := []string{}

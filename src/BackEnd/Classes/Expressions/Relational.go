@@ -142,33 +142,33 @@ func (rl *Relational) compaire(value1, value2, sign string, c3dgen *C3DGen.C3DGe
 }
 
 func (rl *Relational) compaireStr(value1, value2, sign string, c3dgen *C3DGen.C3DGen) *utils.ReturnValue {
-	posL := c3dgen.NewTemp()
-	posR := c3dgen.NewTemp()
-	tempL := c3dgen.NewTemp()
-	tempR := c3dgen.NewTemp()
-	ciclo := c3dgen.NewLabel()
-	confirmar := c3dgen.NewLabel()
+	newTemp1 := c3dgen.NewTemp()
+	newTemp2 := c3dgen.NewTemp()
+	newTemp3 := c3dgen.NewTemp()
+	newTemp4 := c3dgen.NewTemp()
+	newLbl1 := c3dgen.NewLabel()
+	newLbl2 := c3dgen.NewLabel()
 	trueLbl := c3dgen.NewLabel()
 	falseLbl := c3dgen.NewLabel()
 
-	c3dgen.AddExpressionInit(posL, value1)
-	c3dgen.AddExpressionInit(posR, value2)
+	c3dgen.AddExpressionInit(newTemp1, value1)
+	c3dgen.AddExpressionInit(newTemp2, value2)
 
-	c3dgen.AddLabel(ciclo)
+	c3dgen.AddLabel(newLbl1)
 
-	c3dgen.AddGetHeap(tempL, "(int) "+posL)
-	c3dgen.AddGetHeap(tempR, "(int) "+posR)
+	c3dgen.AddGetHeap(newTemp3, "(int) "+newTemp1)
+	c3dgen.AddGetHeap(newTemp4, "(int) "+newTemp2)
 
-	c3dgen.AddIf(tempL, tempR, "!=", falseLbl)
-	c3dgen.AddIf(tempL, "-1", "==", confirmar)
+	c3dgen.AddIf(newTemp3, newTemp4, "!=", falseLbl)
+	c3dgen.AddIf(newTemp3, "-1", "==", newLbl2)
 
-	c3dgen.AddExpression(posL, posL, "+", "1")
-	c3dgen.AddExpression(posR, posR, "+", "1")
+	c3dgen.AddExpression(newTemp1, newTemp1, "+", "1")
+	c3dgen.AddExpression(newTemp2, newTemp2, "+", "1")
 
-	c3dgen.AddGoto(ciclo)
+	c3dgen.AddGoto(newLbl1)
 
-	c3dgen.AddLabel(confirmar)
-	c3dgen.AddIf(tempL, tempR, sign, trueLbl)
+	c3dgen.AddLabel(newLbl2)
+	c3dgen.AddIf(newTemp3, newTemp4, sign, trueLbl)
 	c3dgen.AddGoto(falseLbl)
 
 	return &utils.ReturnValue{IsTmp: false, Type: utils.BOOLEAN, TrueLabel: []string{trueLbl}, FalseLabel: []string{falseLbl}}

@@ -253,7 +253,7 @@ func (ar *Arithmetic) mod(env *env.Env, c3dgen *C3DGen.C3DGen) *utils.ReturnValu
 			c3dgen.AddExpressionInit(newTemp2, "0")
 			c3dgen.AddGoto(newLbl2)
 			c3dgen.AddLabel(newLbl1)
-			c3dgen.AddExpression(newTemp2, value1.StrValue, "%", "(int) "+newTemp1)
+			c3dgen.AddExpression(newTemp2, "(int) "+value1.StrValue, "%", "(int) "+newTemp1)
 			c3dgen.AddLabel(newLbl2)
 			if value2.NumValue.(int) == 0 {
 				env.SetError("División entre cero", ar.Exp2.LineN(), ar.Exp2.ColumnN())

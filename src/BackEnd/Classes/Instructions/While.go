@@ -28,5 +28,28 @@ func (w *While) ColumnN() int {
 }
 
 func (w *While) Exec(Env *env.Env, c3dgen *C3DGen.C3DGen) *utils.ReturnValue {
+	c3dgen.AddComment("---------- While ----------")
+
+	continueLbl := c3dgen.NewLabel()
+	c3dgen.AddLabel(continueLbl)
+
+	condicion := w.Condition.Exec(Env, c3dgen)
+	envWhile := env.NewEnv(Env, Env.Name+" While")
+
+	envWhile.BreakLbl = condicion.FalseLabel
+	envWhile.ContinueLbl = []string{continueLbl}
+
+	for _, lbl := range condicion.TrueLabel {
+		c3dgen.AddLabel(lbl)
+	}
+
+	w.Block.Exec(envWhile, c3dgen)
+	c3dgen.AddGoto(continueLbl)
+
+	for _, lbl := range condicion.FalseLabel {
+		c3dgen.AddLabel(lbl)
+	}
+
+	c3dgen.AddComment("---------------------------")
 	return nil
 }

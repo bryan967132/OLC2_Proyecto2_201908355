@@ -25,5 +25,10 @@ func (b *Break) ColumnN() int {
 }
 
 func (b *Break) Exec(env *env.Env, c3dgen *C3DGen.C3DGen) *utils.ReturnValue {
+	c3dgen.AddComment("---------- Break ----------")
+	for _, lbl := range env.BreakLbl {
+		c3dgen.AddGoto(lbl)
+	}
+	c3dgen.AddComment("---------------------------")
 	return nil
 }
