@@ -6,15 +6,17 @@ import (
 )
 
 type Env struct {
-	Ids       *map[string]*Symbol
-	Functions *map[string]*interface{}
-	Size      *map[string]int
-	previous  *Env
-	Name      string
+	Ids         *map[string]*Symbol
+	Functions   *map[string]*interface{}
+	Size        *map[string]int
+	previous    *Env
+	Name        string
+	ContinueLbl []string
+	BreakLbl    []string
 }
 
 func NewEnv(previous *Env, name string) *Env {
-	return &Env{&map[string]*Symbol{}, &map[string]*interface{}{}, &map[string]int{"size": 0}, previous, name}
+	return &Env{Ids: &map[string]*Symbol{}, Functions: &map[string]*interface{}{}, Size: &map[string]int{"size": 0}, previous: previous, Name: name, ContinueLbl: []string{}, BreakLbl: []string{}}
 }
 
 func (env *Env) SaveID(isVariable bool, id string, value *utils.ReturnValue, Type utils.Type, line, column int) *Symbol {
