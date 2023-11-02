@@ -5,5 +5,4 @@
 /**/*.tokens
 /**/codemirror
 .vscode
-/**/Images
 **/*.cpp
