@@ -2,19 +2,22 @@ package main
 
 import (
 	env "TSwift/Classes/Env"
+	C3DGen "TSwift/Classes/Generator"
 	instructions "TSwift/Classes/Instructions"
 	interfaces "TSwift/Classes/Interfaces"
+	utils "TSwift/Classes/Utils"
 	listener "TSwift/Language"
 	parser "TSwift/Language/Parser"
 	"fmt"
 	"io/ioutil"
+	"os"
 	"strings"
 
 	"github.com/antlr4-go/antlr/v4"
 )
 
 func main() {
-	filePath := "C:\\Users\\bryan\\Documents\\USAC\\Organización de Lenguajes y Compiladores 2\\Laboratorio\\Proyecto1\\Calificación\\Hanoi.swift"
+	filePath := "../../../Calificación/Intermedias.swift"
 	fileData, err := ioutil.ReadFile(filePath)
 	if err != nil {
 		fmt.Println("Error al leer el archivo:", err)
@@ -34,8 +37,8 @@ func main() {
 	var listener *listener.TSwfitListener = listener.NewTSwfitListener()
 	antlr.ParseTreeWalkerDefault.Walk(listener, tree)
 
-	/*//fmt.Println(TreeDot(tree, parser.RuleNames))
-	archivo, _ := os.Create("../../../Inputs/Tree.dot")
+	// fmt.Println(TreeDot(tree, parser.RuleNames))
+	/*archivo, _ := os.Create("../../../Inputs/Tree.dot")
 	defer archivo.Close() // Cierra el archivo al final de la función
 
 	// Escribe en el archivo
@@ -43,7 +46,8 @@ func main() {
 	_, _ = escritor.WriteString(TreeDot(tree, parser.RuleNames))*/
 
 	global := env.NewEnv(nil, "Global")
-	func() {
+	c3dgen := C3DGen.NewC3DGen()
+	/*func() {
 		defer func() {
 			if r := recover(); r != nil {
 				global.SetError(Replaces(fmt.Sprintf("%v", r)), 0, 0)
@@ -52,35 +56,38 @@ func main() {
 	}()
 	for _, fail := range parserErrors.Errors {
 		global.SetError(Replaces(fail.Msg), fail.Line, fail.Column)
-	}
+	}*/
 
 	execute := listener.Code
 	for _, instruction := range execute {
-		func() {
-			defer func() {
-				if r := recover(); r != nil {
-					global.SetError(Replaces(fmt.Sprintf("%v", r)), instruction.(interfaces.Instruction).LineN(), instruction.(interfaces.Instruction).ColumnN())
-				}
-			}()
-			if _, ok := instruction.(interfaces.Instruction).(*instructions.Function); ok {
-				instruction.(interfaces.Instruction).Exec(global)
+		/*func() {
+		defer func() {
+			if r := recover(); r != nil {
+				global.SetError(Replaces(fmt.Sprintf("%v", r)), instruction.(interfaces.Instruction).LineN(), instruction.(interfaces.Instruction).ColumnN())
 			}
-		}()
+		}()*/
+		if _, ok := instruction.(interfaces.Instruction).(*instructions.Function); ok {
+			instruction.(interfaces.Instruction).Exec(global, c3dgen)
+		}
+		//}()
 	}
 	for _, instruction := range execute {
-		func() {
-			defer func() {
-				if r := recover(); r != nil {
-					global.SetError(Replaces(fmt.Sprintf("%v", r)), instruction.(interfaces.Instruction).LineN(), instruction.(interfaces.Instruction).ColumnN())
-				}
-			}()
-			if _, ok := instruction.(interfaces.Instruction).(*instructions.Function); !ok {
-				instruction.(interfaces.Instruction).Exec(global)
+		/*func() {
+		defer func() {
+			if r := recover(); r != nil {
+				global.SetError(Replaces(fmt.Sprintf("%v", r)), instruction.(interfaces.Instruction).LineN(), instruction.(interfaces.Instruction).ColumnN())
 			}
-		}()
+		}()*/
+		if _, ok := instruction.(interfaces.Instruction).(*instructions.Function); !ok {
+			instruction.(interfaces.Instruction).Exec(global, c3dgen)
+		}
+		//}()
 	}
-	global.PrintPrints()
-	global.PrintErrors()
+	fmt.Println(utils.GetStringOuts())
+	c3dgen.GenerateFinalCode()
+	file, _ := os.Create("../../Compilado.cpp")
+	defer file.Close()
+	_, _ = file.WriteString(strings.Join(c3dgen.GetFinalCode(), "\n"))
 }
 
 func Replaces(msg string) string {

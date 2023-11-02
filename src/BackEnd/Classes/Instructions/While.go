@@ -37,7 +37,7 @@ func (w *While) Exec(Env *env.Env, c3dgen *C3DGen.C3DGen) *utils.ReturnValue {
 	envWhile := env.NewEnv(Env, Env.Name+" While")
 
 	envWhile.BreakLbl = condicion.FalseLabel
-	envWhile.ContinueLbl = []string{continueLbl}
+	envWhile.ContinueLbl = continueLbl
 
 	for _, lbl := range condicion.TrueLabel {
 		c3dgen.AddLabel(lbl)
