@@ -299,9 +299,9 @@ func (g *C3DGen) GenerateIntString() {
 		newLbl5 := g.NewLabel()
 		// Función intString
 		g.C3DNatives = append(g.C3DNatives, "void intString() {")
-		g.C3DNatives = append(g.C3DNatives, "\n"+newTemp1+" = H;")
+		g.C3DNatives = append(g.C3DNatives, "\t"+newTemp1+" = H;")
 		g.C3DNatives = append(g.C3DNatives, "\t"+newTemp2+" = P + 1;")
-		g.C3DNatives = append(g.C3DNatives, "\n"+newTemp3+" = stack[(int) "+newTemp2+"];")
+		g.C3DNatives = append(g.C3DNatives, "\t"+newTemp3+" = stack[(int) "+newTemp2+"];")
 		g.C3DNatives = append(g.C3DNatives, "\tif("+newTemp3+" > 0) goto "+newLbl1+";")
 		g.C3DNatives = append(g.C3DNatives, "\t"+newTemp3+" = -"+newTemp3+";")
 		g.C3DNatives = append(g.C3DNatives, "\theap[(int) H] = 45;")
