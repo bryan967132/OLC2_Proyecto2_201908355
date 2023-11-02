@@ -107,7 +107,7 @@ func (c Controller) Parser(ctx *fiber.Ctx) error {
 	c3dgen.GenerateFinalCode()
 
 	return ctx.JSON(fiber.Map{
-		"console": utils.GetStringOuts(),
+		"console": strings.Join(c3dgen.GetFinalCode(), "\n"),
 	})
 }
 

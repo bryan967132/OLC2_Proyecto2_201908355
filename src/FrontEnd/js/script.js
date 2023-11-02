@@ -15,7 +15,7 @@ editor.setSize(null, window.innerHeight - document.getElementById("editor").offs
 });
 
 var out = CodeMirror(document.getElementById("console"), {
-    mode: "text",
+    mode: "text/x-c++src",
     lineNumbers: true,
     styleActiveLine: false,
     readOnly: true,
