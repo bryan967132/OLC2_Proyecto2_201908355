@@ -12,13 +12,14 @@ type C3DGen struct {
 	Temporals       []string
 	PrintString     bool
 	ConcatString    bool
+	IntString       bool
 	MainC3DCode     bool
 	BreakLabel      string
 	ContinueLabel   string
 }
 
 func NewC3DGen() *C3DGen {
-	return &C3DGen{TemporalCount: 0, LabelCount: 0, BreakLabel: "", ContinueLabel: "", PrintString: true, ConcatString: true, MainC3DCode: true}
+	return &C3DGen{TemporalCount: 0, LabelCount: 0, BreakLabel: "", ContinueLabel: "", PrintString: true, ConcatString: true, IntString: true, MainC3DCode: true}
 }
 
 func (g *C3DGen) GetCode() []string {
@@ -65,6 +66,23 @@ func (g *C3DGen) AddLabel(Label string) {
 		g.C3DInstructions = append(g.C3DInstructions, Label+":")
 	} else {
 		g.C3DFunctions = append(g.C3DFunctions, Label+":")
+	}
+}
+
+func (g *C3DGen) AddFunc(id string) {
+	g.C3DFunctions = append(g.C3DFunctions, "void "+id+"() {")
+}
+
+func (g *C3DGen) AddEnd() {
+	g.C3DFunctions = append(g.C3DFunctions, "\treturn;")
+	g.C3DFunctions = append(g.C3DFunctions, "}\n")
+}
+
+func (g *C3DGen) AddCall(id string) {
+	if g.MainC3DCode {
+		g.C3DInstructions = append(g.C3DInstructions, "\t"+id+"();")
+	} else {
+		g.C3DFunctions = append(g.C3DFunctions, "\t"+id+"();")
 	}
 }
 
@@ -150,14 +168,6 @@ func (g *C3DGen) AddGetStack(target string, index string) {
 	}
 }
 
-func (g *C3DGen) AddCall(target string) {
-	if g.MainC3DCode {
-		g.C3DInstructions = append(g.C3DInstructions, "\t"+target+"();")
-	} else {
-		g.C3DFunctions = append(g.C3DFunctions, "\t"+target+"();")
-	}
-}
-
 func (g *C3DGen) AddPrintf(typePrint string, value string) {
 	if g.MainC3DCode {
 		g.C3DInstructions = append(g.C3DInstructions, "\tprintf(\"%"+typePrint+"\", "+value+");")
@@ -170,7 +180,7 @@ func (g *C3DGen) AddComment(target string) {
 	if g.MainC3DCode {
 		g.C3DInstructions = append(g.C3DInstructions, "\t/* "+target+" */")
 	} else {
-		g.C3DFunctions = append(g.C3DFunctions, "/* "+target+" */")
+		g.C3DFunctions = append(g.C3DFunctions, "\t/* "+target+" */")
 	}
 }
 
@@ -269,6 +279,60 @@ func (g *C3DGen) GenerateConcatString() {
 		g.C3DNatives = append(g.C3DNatives, "\treturn;")
 		g.C3DNatives = append(g.C3DNatives, "}\n")
 		g.ConcatString = false
+	}
+}
+
+func (g *C3DGen) GenerateIntString() {
+	if g.IntString {
+		// Temporales y Etiquetas
+		newTemp1 := g.NewTemp()
+		newTemp2 := g.NewTemp()
+		newTemp3 := g.NewTemp()
+		newTemp4 := g.NewTemp()
+		newTemp5 := g.NewTemp()
+		newTemp6 := g.NewTemp()
+		newTemp7 := g.NewTemp()
+		newLbl1 := g.NewLabel()
+		newLbl2 := g.NewLabel()
+		newLbl3 := g.NewLabel()
+		newLbl4 := g.NewLabel()
+		newLbl5 := g.NewLabel()
+		// Función intString
+		g.C3DNatives = append(g.C3DNatives, "void intString() {")
+		g.C3DNatives = append(g.C3DNatives, "\n"+newTemp1+" = H;")
+		g.C3DNatives = append(g.C3DNatives, "\t"+newTemp2+" = P + 1;")
+		g.C3DNatives = append(g.C3DNatives, "\n"+newTemp3+" = stack[(int) "+newTemp2+"];")
+		g.C3DNatives = append(g.C3DNatives, "\tif("+newTemp3+" > 0) goto "+newLbl1+";")
+		g.C3DNatives = append(g.C3DNatives, "\t"+newTemp3+" = -"+newTemp3+";")
+		g.C3DNatives = append(g.C3DNatives, "\theap[(int) H] = 45;")
+		g.C3DNatives = append(g.C3DNatives, "\tH = H + 1;")
+		g.C3DNatives = append(g.C3DNatives, newLbl1+":")
+		g.C3DNatives = append(g.C3DNatives, "\t"+newTemp4+" = "+newTemp3+";")
+		g.C3DNatives = append(g.C3DNatives, "\t"+newTemp5+" = "+newTemp3+";")
+		g.C3DNatives = append(g.C3DNatives, "\t"+newTemp6+" = 0;")
+		g.C3DNatives = append(g.C3DNatives, "\t"+newTemp7+" = 1;")
+		g.C3DNatives = append(g.C3DNatives, newLbl2+":")
+		g.C3DNatives = append(g.C3DNatives, "\tif("+newTemp4+" < 1) goto "+newLbl4+";")
+		g.C3DNatives = append(g.C3DNatives, "\t"+newTemp7+" = "+newTemp7+" * 10;")
+		g.C3DNatives = append(g.C3DNatives, "\t"+newTemp4+" = "+newTemp4+" / 10;")
+		g.C3DNatives = append(g.C3DNatives, "\tgoto "+newLbl2+";")
+		g.C3DNatives = append(g.C3DNatives, newLbl4+":")
+		g.C3DNatives = append(g.C3DNatives, "\t"+newTemp7+" = "+newTemp7+" / 10;")
+		g.C3DNatives = append(g.C3DNatives, newLbl3+":")
+		g.C3DNatives = append(g.C3DNatives, "\tif("+newTemp7+" < 1) goto "+newLbl5+";")
+		g.C3DNatives = append(g.C3DNatives, "\t"+newTemp5+" = "+newTemp3+" / "+newTemp7+";")
+		g.C3DNatives = append(g.C3DNatives, "\t"+newTemp6+" = "+newTemp5+" +48;")
+		g.C3DNatives = append(g.C3DNatives, "\theap[(int) H] = "+newTemp6+";")
+		g.C3DNatives = append(g.C3DNatives, "\tH = H + 1;")
+		g.C3DNatives = append(g.C3DNatives, "\t"+newTemp3+" = (int) "+newTemp3+" % (int) "+newTemp7+";")
+		g.C3DNatives = append(g.C3DNatives, "\t"+newTemp7+" = "+newTemp7+" / 10;")
+		g.C3DNatives = append(g.C3DNatives, "\tgoto "+newLbl3+";")
+		g.C3DNatives = append(g.C3DNatives, newLbl5+":")
+		g.C3DNatives = append(g.C3DNatives, "\theap[(int) H] = -1;")
+		g.C3DNatives = append(g.C3DNatives, "\tH = H + 1;")
+		g.C3DNatives = append(g.C3DNatives, "\nstack[(int) P] = "+newTemp1+";")
+		g.C3DNatives = append(g.C3DNatives, "}\n")
+		g.IntString = false
 	}
 }
 

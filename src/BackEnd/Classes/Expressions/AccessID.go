@@ -30,8 +30,16 @@ func (ac *AccessID) Exec(env *env.Env, c3dgen *C3DGen.C3DGen) *utils.ReturnValue
 	c3dgen.AddComment("--------- Acceso ----------")
 	value := env.GetValueID(ac.Id, ac.Line, ac.Column)
 	if value != nil {
-		newTemp := c3dgen.NewTemp()
-		c3dgen.AddGetStack(newTemp, strconv.Itoa(value.Position))
+		newTemp2 := strconv.Itoa(value.Position)
+		var newTemp string
+		if !value.IsGlobal {
+			newTemp2 = c3dgen.NewTemp()
+			newTemp = c3dgen.NewTemp()
+			c3dgen.AddExpression(newTemp2, "P", "+", strconv.Itoa(value.Position))
+		} else {
+			newTemp = c3dgen.NewTemp()
+		}
+		c3dgen.AddGetStack(newTemp, "(int) "+newTemp2)
 		if value.Type == utils.BOOLEAN {
 			trueLbl := c3dgen.NewLabel()
 			falseLbl := c3dgen.NewLabel()

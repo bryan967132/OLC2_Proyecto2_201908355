@@ -57,14 +57,14 @@ func (prt *Print) Exec(env *env.Env, c3dgen *C3DGen.C3DGen) *utils.ReturnValue {
 				c3dgen.GeneratePrintString()
 				newTemp1 := c3dgen.NewTemp()
 				newTemp2 := c3dgen.NewTemp()
-				size := strconv.Itoa((*env.Size)["size"])
+				size := strconv.Itoa(env.Size)
 				c3dgen.AddExpression(newTemp1, "P", "+", size)
 				c3dgen.AddExpression(newTemp1, newTemp1, "+", "1")
 				c3dgen.AddSetStack("(int) "+newTemp1, value1.StrValue)
-				c3dgen.AddExpression("P", "P", "+", size)
+				c3dgen.NewEnv(env.Size)
 				c3dgen.AddCall("printString")
 				c3dgen.AddGetStack(newTemp2, "(int) P")
-				c3dgen.AddExpression("P", "P", "-", size)
+				c3dgen.PrevEnv(env.Size)
 			} else {
 				c3dgen.AddPrint("nil")
 			}

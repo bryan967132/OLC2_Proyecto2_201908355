@@ -27,5 +27,33 @@ func (r *Return) ColumnN() int {
 }
 
 func (r *Return) Exec(env *env.Env, c3dgen *C3DGen.C3DGen) *utils.ReturnValue {
+	c3dgen.AddComment("--------- Return ----------")
+	if r.Exp != nil {
+		exp := r.Exp.Exec(env, c3dgen)
+		if exp.Type == utils.BOOLEAN {
+			newLabel := c3dgen.NewLabel()
+
+			for _, lbl := range exp.TrueLabel {
+				c3dgen.AddLabel(lbl)
+			}
+			c3dgen.AddSetStack("(int) P", "1")
+			c3dgen.AddGoto(newLabel)
+
+			for _, lbl := range exp.FalseLabel {
+				c3dgen.AddLabel(lbl)
+			}
+			c3dgen.AddSetStack("(int) P", "0")
+
+			c3dgen.AddLabel(newLabel)
+		} else {
+			c3dgen.AddSetStack("(int) P", exp.StrValue)
+		}
+		c3dgen.AddGoto(env.ReturnLbl)
+		c3dgen.AddComment("---------------------------")
+		return nil
+	}
+	c3dgen.AddSetStack("(int) P", "0")
+	c3dgen.AddGoto(env.ReturnLbl)
+	c3dgen.AddComment("---------------------------")
 	return nil
 }

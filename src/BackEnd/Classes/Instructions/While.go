@@ -35,6 +35,7 @@ func (w *While) Exec(Env *env.Env, c3dgen *C3DGen.C3DGen) *utils.ReturnValue {
 
 	condicion := w.Condition.Exec(Env, c3dgen)
 	envWhile := env.NewEnv(Env, Env.Name+" While")
+	envWhile.Size = Env.Size
 
 	envWhile.BreakLbl = condicion.FalseLabel
 	envWhile.ContinueLbl = continueLbl

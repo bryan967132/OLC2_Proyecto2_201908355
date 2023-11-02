@@ -30,6 +30,8 @@ func (bk *Block) Exec(Env *env.Env, c3dgen *C3DGen.C3DGen) *utils.ReturnValue {
 	newEnv := env.NewEnv(Env, Env.Name)
 	newEnv.ContinueLbl = Env.ContinueLbl
 	newEnv.BreakLbl = Env.BreakLbl
+	newEnv.ReturnLbl = Env.ReturnLbl
+	newEnv.Size = Env.Size
 	var ret *utils.ReturnValue
 	var inst interfaces.Instruction
 	outlbl := []string{}
@@ -40,6 +42,7 @@ func (bk *Block) Exec(Env *env.Env, c3dgen *C3DGen.C3DGen) *utils.ReturnValue {
 			for _, lbl := range ret.OutLabel {
 				outlbl = append(outlbl, lbl)
 			}
+			return ret
 		}
 	}
 	return &utils.ReturnValue{OutLabel: outlbl}

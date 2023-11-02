@@ -11,5 +11,6 @@ type Function interface {
 	ColumnN() int
 	GetParams() []utils.Param
 	GetBlock() Instruction
+	GetType() utils.Type
 	Exec(Env *env.Env, c3dgen *C3DGen.C3DGen) *utils.ReturnValue
 }

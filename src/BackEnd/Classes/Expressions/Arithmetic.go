@@ -87,19 +87,19 @@ func (ar *Arithmetic) plus(env *env.Env, c3dgen *C3DGen.C3DGen) *utils.ReturnVal
 		if ar.Type == utils.STRING {
 			c3dgen.GenerateConcatString()
 			paramTemp := c3dgen.NewTemp()
-			c3dgen.AddExpression(paramTemp, "P", "+", fmt.Sprintf("%v", (*env.Size)["size"]))
+			c3dgen.AddExpression(paramTemp, "P", "+", fmt.Sprintf("%v", env.Size))
 			c3dgen.AddExpression(paramTemp, paramTemp, "+", "1")
 			c3dgen.AddSetStack("(int) "+paramTemp, value1.StrValue)
 
 			c3dgen.AddExpression(paramTemp, paramTemp, "+", "1")
 			c3dgen.AddSetStack("(int) "+paramTemp, value2.StrValue)
 
-			c3dgen.NewEnv((*env.Size)["size"])
+			c3dgen.NewEnv(env.Size)
 			c3dgen.AddCall("concatString")
 
 			temp := c3dgen.NewTemp()
 			c3dgen.AddGetStack(temp, "(int) P")
-			c3dgen.PrevEnv((*env.Size)["size"])
+			c3dgen.PrevEnv(env.Size)
 
 			return &utils.ReturnValue{StrValue: temp, IsTmp: true, Type: ar.Type}
 		}

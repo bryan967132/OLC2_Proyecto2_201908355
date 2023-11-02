@@ -8,22 +8,23 @@ import (
 type Env struct {
 	Ids         *map[string]*Symbol
 	Functions   *map[string]*interface{}
-	Size        *map[string]int
+	Size        int
 	previous    *Env
 	Name        string
 	ContinueLbl string
 	BreakLbl    []string
+	ReturnLbl   string
 }
 
 func NewEnv(previous *Env, name string) *Env {
-	return &Env{Ids: &map[string]*Symbol{}, Functions: &map[string]*interface{}{}, Size: &map[string]int{"size": 0}, previous: previous, Name: name, ContinueLbl: "", BreakLbl: []string{}}
+	return &Env{Ids: &map[string]*Symbol{}, Functions: &map[string]*interface{}{}, Size: 0, previous: previous, Name: name, ContinueLbl: "", BreakLbl: []string{}, ReturnLbl: ""}
 }
 
 func (env *Env) SaveID(isVariable bool, id string, value *utils.ReturnValue, Type utils.Type, line, column int) *Symbol {
 	if _, exists := (*env.Ids)[id]; !exists {
-		(*env.Ids)[id] = &Symbol{IsVariable: isVariable, IsPrimitive: true, Id: id, Type: Type, Position: (*env.Size)["size"]}
+		(*env.Ids)[id] = &Symbol{IsVariable: isVariable, IsPrimitive: true, Id: id, Type: Type, Position: env.Size, IsGlobal: env.Name == "Global"}
 		SymTable.Push(NewSymTab(line, column+1, isVariable, true, id, env.Name, Type, utils.NIL))
-		(*env.Size)["size"] += 1
+		env.Size += 1
 		return (*env.Ids)[id]
 	}
 	env.SetError("Redeclaración de variable existente", line, column)
@@ -40,6 +41,32 @@ func (env *Env) GetValueID(id string, line, column int) *Symbol {
 	}
 	current.SetError(fmt.Sprintf("Acceso a variable inexistente. '%s'", id), line, column)
 	return nil
+}
+
+func (env *Env) SaveFunction(id string, Func *interface{}, Type utils.Type, line, column int) bool {
+	if _, exists := (*env.Functions)[id]; !exists {
+		(*env.Functions)[id] = Func
+		SymTable.Push(NewSymTab(line, column+1, false, false, id, env.Name, Type, utils.NIL))
+		return true
+	}
+	env.SetError("Redefinición de función existente", line, column)
+	return false
+}
+
+func (env *Env) GetFunction(id string, line, column int) *interface{} {
+	if _, exists := (*env.Functions)[id]; exists {
+		return (*env.Functions)[id]
+	}
+	env.SetError("Acceso a función inexistente", line, column)
+	return nil
+}
+
+func (env *Env) GetGlobal() *Env {
+	current := env
+	for current.previous != nil {
+		current = current.previous
+	}
+	return current
 }
 
 func (env *Env) PrintPrints() {
