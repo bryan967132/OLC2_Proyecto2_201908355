@@ -47,22 +47,16 @@ func (i *If) Exec(Env *env.Env, c3dgen *C3DGen.C3DGen) *utils.ReturnValue {
 			c3dgen.AddLabel(lbl)
 		}
 
-		copyOutLabel := []string{}
-		for _, lbl := range block.OutLabel {
-			copyOutLabel = append(copyOutLabel, lbl)
-		}
-
 		// else
 		if i.Except != nil {
-			except := i.Except.Exec(Env, c3dgen)
-			for _, lbl := range except.OutLabel {
-				copyOutLabel = append(copyOutLabel, lbl)
-			}
+			i.Except.Exec(Env, c3dgen)
 		}
 
-		c3dgen.AddLabel(newLabel)
+		for _, lbl := range block.OutLabel {
+			c3dgen.AddLabel(lbl)
+		}
 		c3dgen.AddComment("---------------------------")
-		return &utils.ReturnValue{OutLabel: copyOutLabel}
+		return nil
 	}
 	c3dgen.AddComment("---------------------------")
 	Env.SetError("No se evalúa una expresión lógica o relacional como condicion", i.Line, i.Column)

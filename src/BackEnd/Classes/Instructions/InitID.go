@@ -59,29 +59,21 @@ func (in *InitID) Init(value *utils.ReturnValue, Env *env.Env, c3dgen *C3DGen.C3
 			for _, lbl := range value.TrueLabel {
 				c3dgen.AddLabel(lbl)
 			}
-			newTemp := c3dgen.NewTemp()
-			c3dgen.AddExpression(newTemp, "P", "+", fmt.Sprintf("%v", newID.Position))
-			c3dgen.AddSetStack(fmt.Sprintf("(int) %v", newTemp), "1")
+			c3dgen.AddSetStack(fmt.Sprintf("%v", newID.Position), "1")
 			c3dgen.AddGoto(newLabel)
 			for _, lbl := range value.FalseLabel {
 				c3dgen.AddLabel(lbl)
 			}
-			newTemp = c3dgen.NewTemp()
-			c3dgen.AddExpression(newTemp, "P", "+", fmt.Sprintf("%v", newID.Position))
-			c3dgen.AddSetStack(fmt.Sprintf("(int) %v", newTemp), "0")
+			c3dgen.AddSetStack(fmt.Sprintf("%v", newID.Position), "0")
 			c3dgen.AddGoto(newLabel)
 			c3dgen.AddLabel(newLabel)
 		} else {
-			newTemp := c3dgen.NewTemp()
-			c3dgen.AddExpression(newTemp, "P", "+", fmt.Sprintf("%v", newID.Position))
-			c3dgen.AddSetStack(fmt.Sprintf("(int) %v", newTemp), value.StrValue)
+			c3dgen.AddSetStack(fmt.Sprintf("%v", newID.Position), value.StrValue)
 		}
 	} else {
 		newID = Env.SaveID(in.IsVariable, in.Id, &utils.ReturnValue{Type: utils.NIL}, in.Type, in.Line, in.Column)
 		nilValue := *expressions.NewPrimitive(0, 0, "nil", utils.STRING).Exec(Env, c3dgen)
-		newTemp := c3dgen.NewTemp()
-		c3dgen.AddExpression(newTemp, "P", "+", fmt.Sprintf("%v", newID.Position))
-		c3dgen.AddSetStack(fmt.Sprintf("(int) %v", newTemp), nilValue.StrValue)
+		c3dgen.AddSetStack(fmt.Sprintf("%v", newID.Position), nilValue.StrValue)
 	}
 	c3dgen.AddComment("---------------------------")
 }

@@ -2,6 +2,7 @@ package controller
 
 import (
 	env "TSwift/Classes/Env"
+	C3DGen "TSwift/Classes/Generator"
 	instructions "TSwift/Classes/Instructions"
 	interfaces "TSwift/Classes/Interfaces"
 	utils "TSwift/Classes/Utils"
@@ -53,6 +54,7 @@ func (c Controller) Parser(ctx *fiber.Ctx) error {
 	var listener *listener.TSwfitListener = listener.NewTSwfitListener()
 
 	global := env.NewEnv(nil, "Global")
+	c3dgen := C3DGen.NewC3DGen()
 	func() {
 		defer func() {
 			if r := recover(); r != nil {
@@ -83,7 +85,7 @@ func (c Controller) Parser(ctx *fiber.Ctx) error {
 						}
 					}()
 					if _, ok := instruction.(interfaces.Instruction).(*instructions.Function); ok {
-						instruction.(interfaces.Instruction).Exec(global)
+						instruction.(interfaces.Instruction).Exec(global, c3dgen)
 					}
 				}()
 			}
@@ -95,7 +97,7 @@ func (c Controller) Parser(ctx *fiber.Ctx) error {
 						}
 					}()
 					if _, ok := instruction.(interfaces.Instruction).(*instructions.Function); !ok {
-						instruction.(interfaces.Instruction).Exec(global)
+						instruction.(interfaces.Instruction).Exec(global, c3dgen)
 					}
 				}()
 			}

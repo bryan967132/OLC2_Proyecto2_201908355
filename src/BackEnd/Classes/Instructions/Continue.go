@@ -27,9 +27,7 @@ func (c *Continue) ColumnN() int {
 
 func (c *Continue) Exec(env *env.Env, c3dgen *C3DGen.C3DGen) *utils.ReturnValue {
 	c3dgen.AddComment("-------- Continue ---------")
-	for _, lbl := range env.ContinueLbl {
-		c3dgen.AddGoto(lbl)
-	}
+	c3dgen.AddGoto(env.ContinueLbl)
 	c3dgen.AddComment("---------------------------")
 	return nil
 }

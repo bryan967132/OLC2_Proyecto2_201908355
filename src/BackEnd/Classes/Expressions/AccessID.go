@@ -30,20 +30,18 @@ func (ac *AccessID) Exec(env *env.Env, c3dgen *C3DGen.C3DGen) *utils.ReturnValue
 	c3dgen.AddComment("--------- Acceso ----------")
 	value := env.GetValueID(ac.Id, ac.Line, ac.Column)
 	if value != nil {
-		newTemp1 := c3dgen.NewTemp()
-		newTemp2 := c3dgen.NewTemp()
-		c3dgen.AddExpression(newTemp1, "P", "+", strconv.Itoa(value.Position))
-		c3dgen.AddGetStack(newTemp2, "(int) "+newTemp1)
+		newTemp := c3dgen.NewTemp()
+		c3dgen.AddGetStack(newTemp, strconv.Itoa(value.Position))
 		if value.Type == utils.BOOLEAN {
 			trueLbl := c3dgen.NewLabel()
 			falseLbl := c3dgen.NewLabel()
-			c3dgen.AddIf(newTemp2, "1", "==", trueLbl)
+			c3dgen.AddIf(newTemp, "1", "==", trueLbl)
 			c3dgen.AddGoto(falseLbl)
 			result := &utils.ReturnValue{IsTmp: false, Type: utils.BOOLEAN, TrueLabel: []string{trueLbl}, FalseLabel: []string{falseLbl}}
 			c3dgen.AddComment("---------------------------")
 			return result
 		}
-		result := &utils.ReturnValue{StrValue: newTemp2, IsTmp: true, Type: value.Type}
+		result := &utils.ReturnValue{StrValue: newTemp, IsTmp: true, Type: value.Type}
 		c3dgen.AddComment("---------------------------")
 		return result
 	}
