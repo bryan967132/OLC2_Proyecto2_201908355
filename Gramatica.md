@@ -74,7 +74,7 @@
 | ```typeComp```         | ```exp```                |
 
 ## Producciones
-```antlr4
+```java
 init :
 	instsglobal EOF |
 	EOF
